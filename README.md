@@ -5,6 +5,10 @@
 - npm start
 - Configured Tailwind CSS
 - Header
+- Routing
+- Login/SignUp Page
+- Form Validation
+- useRef Hook
 
 # Features
 - Login/Signup page
