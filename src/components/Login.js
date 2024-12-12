@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react'
-import Header from './Header'
-import { checkValidData } from '../utils/Validate';
+import React, { useRef, useState } from "react";
+import Header from "./Header";
+import { checkValidData } from "../utils/Validate";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Login = () => {
-
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -12,69 +13,110 @@ const Login = () => {
   const password = useRef(null);
 
   const handleButtonClick = () => {
-    //Validate Form Data
-    console.log(email.current.value);
-    console.log(password.current.value);
+    // Get input values safely
+    // const nameValue = name.current?.value || ""; // Empty string if ref is null
+    const emailValue = email.current?.value || "";
+    const passwordValue = password.current?.value || "";
 
-    const message = checkValidData(name.current.value,email.current.value, password.current.value);
+    // Validate form data
+    const message = checkValidData( emailValue, passwordValue);
     setErrorMessage(message);
-  }
+    if (message) return;
 
-  const togleSignInForm = () => {
+    // Sign In/Sign Up logic
+    if (!isSignInForm) {
+      // Sign Up logic
+      createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("User Signed Up:", user);
+          setErrorMessage(null); // Clear errors on success
+        })
+        .catch((error) => {
+          setErrorMessage(`${error.code}: ${error.message}`);
+        });
+    } else {
+      // Sign In logic
+      signInWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("User Signed In:", user);
+          setErrorMessage(null); // Clear errors on success
+        })
+        .catch((error) => {
+          setErrorMessage(`${error.code}: ${error.message}`);
+        });
+    }
+  };
+
+  const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
-  }
+    setErrorMessage(null); // Reset error message when toggling
+  };
 
   return (
     <div>
       <Header />
-      <div className='absolute'>
+      <div className="absolute">
         <img
-          src='https://assets.nflxext.com/ffe/siteui/vlv3/158a0e2a-cca4-40f5-86b8-11ea2a281b06/web_tall_panel/IN-en-20241202-TRIFECTA-perspective_052fb757-35ce-4655-946e-3c9ffac95fd0_large.jpg'
-          alt='Backgound ' />
+          src="https://assets.nflxext.com/ffe/siteui/vlv3/158a0e2a-cca4-40f5-86b8-11ea2a281b06/web_tall_panel/IN-en-20241202-TRIFECTA-perspective_052fb757-35ce-4655-946e-3c9ffac95fd0_large.jpg"
+          alt="Background"
+        />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className='absolute w-1/4 bg-black p-12 my-36 mx-auto right-0 left-0 text-white bg-opacity-70 rounded-md'>
-
-        <h1
-          className='text-3xl font-bold py-4'>
-          {(isSignInForm) ? "Sign In" : "Sign Up"}
+        className="absolute w-1/4 bg-black p-12 my-36 mx-auto right-0 left-0 text-white bg-opacity-70 rounded-md"
+      >
+        <h1 className="text-3xl font-bold py-4">
+          {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
-        {!isSignInForm && <input
-        ref={name}
-          type='text'
-          placeholder='Full Name'
-          className='p-2 my-4 w-full  bg-gray-700 rounded-md'
-        />}
+
+        {/* Name Field (Only for Sign-Up) */}
+        {!isSignInForm && (
+          <input
+            ref={name}
+            type="text"
+            placeholder="Full Name"
+            className="p-2 my-4 w-full bg-gray-700 rounded-md"
+          />
+        )}
+
+        {/* Email Field */}
         <input
           ref={email}
-          type='text'
-          placeholder='Email Address'
-          className='p-2 my-4 w-full bg-gray-700 rounded-md'
+          type="text"
+          placeholder="Email Address"
+          className="p-2 my-4 w-full bg-gray-700 rounded-md"
         />
+
+        {/* Password Field */}
         <input
           ref={password}
-          type='password'
-          placeholder='Password'
-          className='p-2 my-4 w-full  bg-gray-700 rounded-md'
+          type="password"
+          placeholder="Password"
+          className="p-2 my-4 w-full bg-gray-700 rounded-md"
         />
-        <p
-          className='text-red-500 font-bold text-lg py-2'>
-          {errorMessage}
-        </p>
+
+        {/* Error Message */}
+        <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
+
+        {/* Submit Button */}
         <button
-          className='p-4 my-4 bg-red-600 w-full  rounded-md'
-          onClick={handleButtonClick}>
-          {(isSignInForm) ? "Sign In" : "Sign Up"}
+          className="p-4 my-4 bg-red-600 w-full rounded-md"
+          onClick={handleButtonClick}
+        >
+          {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
-        <p
-          className='py-4 cursor-pointer'
-          onClick={togleSignInForm}>
-          {(isSignInForm) ? "New to Netflix-GPT? Sign Up Now" : "Already a User? Sign In Now"}
+
+        {/* Toggle Sign-In/Sign-Up */}
+        <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>
+          {isSignInForm
+            ? "New to Netflix-GPT? Sign Up Now"
+            : "Already a User? Sign In Now"}
         </p>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

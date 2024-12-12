@@ -11,6 +11,9 @@
 - useRef Hook
 - Firebase Setup
 - deploy on firebase
+- Create Signup user account
+- Implemented Sign in user api
+- Created redux Store 
 
 # Features
 - Login/Signup page
