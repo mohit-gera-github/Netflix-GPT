@@ -14,6 +14,16 @@
 - Create Signup user account
 - Implemented Sign in user api
 - Created redux Store 
+- Get data from TMDB movies
+- Created custom hooks for now playing an trailer
+- Updated store with movie data
+- Planning for main container and secondary container
+- Fetch data for Trailer Vider
+- Updated the store for trailer vider
+- Updated store to add trailer 
+- Embedded Youtube Video and make it autoplay and mute
+- Build Main Container
+
 
 # Features
 - Login/Signup page
