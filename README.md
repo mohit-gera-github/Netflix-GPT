@@ -23,7 +23,7 @@
 - Updated store to add trailer 
 - Embedded Youtube Video and make it autoplay and mute
 - Build Main Container
-
+- Build Secondary Container
 
 # Features
 - Login/Signup page

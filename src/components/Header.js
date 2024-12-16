@@ -20,11 +20,14 @@ const Header = () => {
   return (
     <>
       <div className='absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between' >
+        <div className='flex'> 
         <img
           className='w-44'
           src={LOGO}
           alt='Logo'
         />
+        <p className='text-red-600 font-semibold text-5xl py-2 text-'>-GPT</p>
+        </div>
         {user && (
           <div className='flex p-2'>
             <img
