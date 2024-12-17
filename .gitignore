@@ -6,6 +6,7 @@
 .pnp.js
 /src/utils/firebase.js
 /src/components/constant.js
+.env 
 
 # testing
 /coverage
