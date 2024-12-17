@@ -3,8 +3,10 @@ import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { LOGO } from './constant';
+import { LOGO, SUPPORTED_LANGUAGES } from './constant';
 import { addUser, removeUser } from '../utils/userSlice'; // Ensure this is the correct import path
+import { toggleGptSearchView } from '../utils/gptSlice';
+import { changeLanguage } from '../utils/configSlice';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -50,6 +52,11 @@ const Header = () => {
       dispatch(toggleGptSearchView());
   };
 
+  
+  const handleLanguageChange = (e) => {
+    dispatch(changeLanguage(e.target.value));
+  };
+
   return (
     <>
       <div className='absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between'>
@@ -59,11 +66,23 @@ const Header = () => {
         </div>
         {user && (
           <div className='flex p-2'>
+            { showGptSearch && ( 
+            <select
+              className="p-2 m-2 bg-gray-900 text-white"
+              onChange={handleLanguageChange}
+            >
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option key={lang.identifier} value={lang.identifier}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+            )}
             <button
               className='py-2 px-4 m-2 bg-purple-500 text-white rounded-lg'
               onClick={handleGptSearchClick}
             >
-              GPT Search
+              {showGptSearch ? "Home Page" : "GPT Search"}
             </button>
             <img
               alt='usericon'

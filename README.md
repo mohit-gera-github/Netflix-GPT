@@ -24,6 +24,8 @@
 - Embedded Youtube Video and make it autoplay and mute
 - Build Main Container
 - Build Secondary Container
+- Created  GPT- search Page
+- Added Multi-lang Feature
 
 # Features
 - Login/Signup page
